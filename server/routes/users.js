@@ -14,9 +14,10 @@ var storage = multer.diskStorage({
 
 var upload = multer({ storage: storage});
 
-router.post('/data', upload.any() ,userController.addCsv);
+router.post('/add', upload.any() ,userController.addCsv);
 router.post('/signin', userController.signin);
 router.post('/register', userController.register);
-router.post('/sortedData', auth,userController.sortUsersBasedOnLocation);
+router.post('/getAll', auth,userController.sortUsersBasedOnLocation);
+router.post('/sendMail', userController.sendEmail);
 
 module.exports = router;

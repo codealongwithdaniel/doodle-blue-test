@@ -68,11 +68,23 @@ const userModel = {
     },
 
     getUserDataWithPagination: function(offset, rowCount, callback){
-        connection.query('SELECT * FROM users LIMIT ? , ?', [offset, rowCount], function(err, rows){
+        connection.query('SELECT id, username, place, latitude, longitude FROM users LIMIT ? , ?', [offset, rowCount], function(err, rows){
             if(err){
                 callback(err, null);
             }else{
                 callback(null, rows);
+            }
+        })
+    },
+
+    getAllCount: function(callback){
+        connection.query('SELECT COUNT(*) as recordCount FROM users', function(err, rows){
+            if(err){
+                callback(err, null);
+            }else if(rows.length){
+                callback(null, rows[0]);
+            }else{
+                callback(null, null);
             }
         })
     }

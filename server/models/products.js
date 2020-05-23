@@ -20,6 +20,18 @@ const productModel = {
                 callback(null, rows);
             }
         })
+    },
+
+    getProductsCount: function(callback){
+        connection.query('SELECT COUNT(*) as recordCount FROM products', function(err, rows){
+            if(err){
+                callback(err, null);
+            }else if(rows.length){
+                callback(null, rows[0]);
+            }else{
+                callback(null, null);
+            }
+        })
     }
 }
 

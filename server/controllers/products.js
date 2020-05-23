@@ -8,7 +8,7 @@ const productController = {
                 productName: faker.fake("{{commerce.productName}}"),
                 department: faker.fake("{{commerce.department}}"),
                 price: faker.fake("{{commerce.price}}"),
-                imageUrl: faker.fake("{{image.technics}}"),
+                imageUrl: faker.fake("{{image.technics}}")+'/',
             }
 
             productModel.addProduct(data, function(addErr, addRows){
@@ -27,7 +27,13 @@ const productController = {
             if(pageErr){
                 res.json({success: false, message: 'Something went wrong'});
             }else{
-                res.json({success: true, results: pageRows});
+                productModel.getProductsCount(function(countErr, countRow){
+                    if(countRow){
+                        res.json({success: true, results: pageRows, recordCount: countRow.recordCount});
+                    }else{
+                        res.json({success: false, message: 'Something went wrong'});
+                    }
+                })
             }
         })
     }

@@ -1,0 +1,21 @@
+<div class="container">
+  <form #mailForm="ngForm">
+    <div class="form-group">
+      <label>Email address</label>
+      <input type="email" class="form-control" placeholder="Senders Address" name="senderEmail" [(ngModel)]="emailData.senderEmail" required>
+    </div>
+    <div class="form-group">
+      <label>Subject</label>
+      <input type="text" class="form-control" placeholder="Subject" name="subject" [(ngModel)]="emailData.subject" required>
+    </div>
+    <div class="form-group">
+      <label>Heading</label>
+      <input type="text" class="form-control" placeholder="Heading" name="heading" [(ngModel)]="emailData.heading" required>
+    </div>
+    <div class="form-group">
+      <label>Message</label>
+      <textarea class="form-control" name="" id="" cols="30" rows="10" placeholder="Enter Message" name="message" [(ngModel)]="emailData.message" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary" (click)="sendEmail(mailForm)">Send</button>
+  </form>
+</div>

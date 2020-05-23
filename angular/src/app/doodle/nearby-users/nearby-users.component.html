@@ -1,0 +1,20 @@
+<div class="container">
+  <div class="row">
+    <ng-container *ngFor="let user of users">
+      <div class="col-md-4">
+        <div class="card" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">{{user.username}}</h5>
+            <p class="card-text">Place: {{user.place}} Distance: {{user.distance}}</p>
+            <p class="card-text">Latitude: {{user.latitude}} Longitude: {{user.longitude}}</p>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  <ngb-pagination
+  [(page)]="page"
+  [pageSize]="pageSize"
+  [collectionSize]="totalSize"
+  (pageChange)="onPageChange($event)"></ngb-pagination>
+</div>

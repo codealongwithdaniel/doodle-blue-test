@@ -3,10 +3,54 @@ const fs = require('fs');
 const userModel = require('../models/users');
 const jwt = require('jsonwebtoken');
 const keys = require('../config/keys');
-const sortByDistance = require('sort-by-distance')
+const sortByDistance = require('sort-by-distance');
+const nodemailer = require('nodemailer');
+const smtpTransport = require('nodemailer-smtp-transport');
 const opts = {
     yName: 'latitude',
     xName: 'longitude'
+}
+
+function sendMessage(output, sender, subject,callback){
+    let transporter = nodemailer.createTransport(smtpTransport({
+        service: 'gmail',
+        host: 'smtp.gmail.com',
+        // port: 465,
+        secure: false, // true for 465, false for other ports
+        auth: {
+            user:  'testfornodejs@gmail.com', // generated ethereal user
+            pass: 'test@gmail1' // generated ethereal password
+        },
+        tls:{
+            rejectUnauthorized:false
+        }
+    }));
+
+    // setup email data with unicode symbols
+    let mailOptions = {
+        from: 'testfornodejs@gmail.com', // sender address
+        to: sender, // list of receivers
+        subject: subject, // Subject line
+        //text: 'Hello world?', // plain text body
+        html: output // html body
+    };
+
+    // send mail with defined transport object
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            callback(error, false);
+            console.log(error);
+            return;
+        }
+        console.log('Message sent: %s', info.messageId);
+        // Preview only available when sending through an Ethereal account
+        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+        callback(null, true)
+        // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+        // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+        //res.redirect('/')
+    });
+    
 }
 
 const userController = {
@@ -126,12 +170,36 @@ const userController = {
                     if(pageErr){
                         res.json({success: false, message: 'Something went wrong'});
                     }else{
-                        res.json({success: true, results: sortByDistance(userRows, pageRows, opts)});
+                        userModel.getAllCount(function(countErr, countRow){
+                            if(countRow){
+                                res.json({success: true, results: sortByDistance(userRows, pageRows, opts), recordCount: countRow.recordCount});
+                            }else{
+                                res.json({success: false, message: 'Something went wrong'});
+                            }
+                        })
                     }
                 })
             }
         })
         
+    },
+
+    sendEmail: function(req, res){
+        const output = `
+            <p>You have a new Email</p>
+            <h3>${req.body.heading}</h3>
+            <ul>
+                <li>Message: ${req.body.message}</li>
+            </ul>
+            `;
+        // create reusable transporter object using the default SMTP transport
+        sendMessage(output, req.body.senderEmail, req.body.subject,function(err, success){
+            if(err){
+                res.json({success: false, message: 'Error occured'});
+            }else{
+                res.json({success: true, message: 'Email sent'});
+            }
+        });
     }
 }
 

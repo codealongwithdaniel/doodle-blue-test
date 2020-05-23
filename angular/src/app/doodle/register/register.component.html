@@ -1,0 +1,28 @@
+<div class="container">
+  <div class="contents pt-5">
+    <h2>Hi Doodle Blue</h2>
+    <h3>Register Here</h3>
+    <form #registerForm="ngForm">
+        <div class="form-group">
+          <label>User Name</label>
+          <input type="text" class="form-control" placeholder="Enter username" name="username" [(ngModel)]="userData.username" required>
+        </div>
+        <div class="form-group">
+          <label>Place</label>
+          <input type="text" class="form-control" placeholder="Enter Place" name="place" [(ngModel)]="userData.place" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" class="form-control" placeholder="Password" name="password" [(ngModel)]="userData.password">
+        </div>
+        <div class="row">
+          <div class="col-xs-6">
+              <button type="submit" class="btn btn-primary" (click)="register(registerForm)">Submit</button>
+          </div>
+          <div class="col-xs-6">
+              <a routerLink="/signin" class="btn btn-link">Signin Instead</a>
+          </div>
+        </div>
+      </form>
+  </div>
+</div>
